@@ -48,7 +48,6 @@ const App = () => {
             },
             tabBarActiveTintColor: '#2e8b57',
             tabBarInactiveTintColor: 'gray',
-            tabBarStyle: { backgroundColor: '#f5f5f5' },
           })}
         >
           <Tab.Screen name="Transactions" component={TransactionsStack} />

@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux';
 function TransactionsScreen({ navigation }) {
   const transactions = useSelector(state => state.transactions);
 
-  const renderItem = ({ item }) => (
+  const displayItem = ({ item }) => (
     <TouchableOpacity
       style={styles.item}
       onPress={() => navigation.navigate('Transaction Detail', { transaction: item })}
@@ -13,6 +13,7 @@ function TransactionsScreen({ navigation }) {
       <View style={styles.itemContainer}>
         <Text style={styles.itemName}>{item.name}</Text>
         <Text style={styles.itemAmount}>{item.amount}</Text>
+        <Text style={styles.itemDate}>{item.date}</Text>
       </View>
     </TouchableOpacity>
   );
@@ -21,7 +22,7 @@ function TransactionsScreen({ navigation }) {
     <View style={styles.container}>
       <FlatList
         data={transactions}
-        renderItem={renderItem}
+        renderItem={displayItem}
         keyExtractor={item => item.id}
       />
     </View>
@@ -60,6 +61,10 @@ const styles = StyleSheet.create({
   itemAmount: {
     fontSize: 16,
     color: '#2e8b57',
+  },
+  itemDate: {
+    fontSize: 12,
+    color: '#888',
   },
 });
 
