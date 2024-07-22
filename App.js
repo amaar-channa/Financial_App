@@ -1,14 +1,63 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import React from 'react';
+import { StyleSheet } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { Provider } from 'react-redux';
+import { Ionicons } from '@expo/vector-icons';
+import TransactionsScreen from './components/TransactionsScreen';
+import SummaryScreen from './components/SummaryScreen';
+import TransactionDetailScreen from './components/TransactionDetailScreen';
+import { store } from './store';
 
-export default function App() {
+const Stack = createNativeStackNavigator();
+const Tab = createBottomTabNavigator();
+
+function TransactionsStack() {
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <Stack.Navigator>
+      <Stack.Screen 
+        name="Transactions List" 
+        component={TransactionsScreen} 
+        options={{ headerShown: false }} 
+      />
+      <Stack.Screen 
+        name="Transaction Detail" 
+        component={TransactionDetailScreen} 
+        options={{ title: 'Transaction Details' }} 
+      />
+    </Stack.Navigator>
   );
 }
+
+const App = () => {
+  return (
+    <Provider store={store}>
+      <NavigationContainer>
+        <Tab.Navigator
+          initialRouteName="Transactions"
+          screenOptions={({ route }) => ({
+            tabBarIcon: ({ color, size }) => {
+              let iconName;
+              if (route.name === 'Transactions') {
+                iconName = 'list';
+              } else if (route.name === 'Summary') {
+                iconName = 'stats-chart';
+              }
+              return <Ionicons name={iconName} size={size} color={color} />;
+            },
+            tabBarActiveTintColor: '#2e8b57',
+            tabBarInactiveTintColor: 'gray',
+            tabBarStyle: { backgroundColor: '#f5f5f5' },
+          })}
+        >
+          <Tab.Screen name="Transactions" component={TransactionsStack} />
+          <Tab.Screen name="Summary" component={SummaryScreen} />
+        </Tab.Navigator>
+      </NavigationContainer>
+    </Provider>
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -18,3 +67,5 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 });
+
+export default App;
